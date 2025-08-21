@@ -89,11 +89,11 @@ func (c *EventClient) reconnect() error {
 func (c *EventClient) Subscribe(ctx context.Context, eventTypes []string, handler func(*pb.Event) error) error {
 	// TODO добавить retry логику
 	req := &pb.SubscriptionRequest{
-		ServiceName: c.serviceName,
+		ServiceName: c.config.serviceName,
 		EventTypes:  eventTypes,
 	}
 
-	stream, err := c.conn.Subscribe(ctx, req)
+	stream, err := c.client.Subscribe(ctx, req)
 	if err != nil {
 		return err
 	}
@@ -118,7 +118,7 @@ func (c *EventClient) Subscribe(ctx context.Context, eventTypes []string, handle
 }
 
 func (c *EventClient) Publish(ctx context.Context, event *pb.Event) error {
-	return c.conn.Publish(ctx, event)
+	return c.client.Publish(ctx, event)
 }
 
 func (c *EventClient) Close() error {
