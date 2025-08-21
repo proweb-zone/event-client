@@ -89,7 +89,7 @@ func (c *EventClient) reconnect() error {
 func (c *EventClient) Subscribe(ctx context.Context, eventTypes []string, handler func(*pb.Event) error) error {
 	// TODO добавить retry логику
 	req := &pb.SubscriptionRequest{
-		ServiceName: c.config.serviceName,
+		ServiceName: c.config.ServiceName,
 		EventTypes:  eventTypes,
 	}
 
@@ -117,7 +117,7 @@ func (c *EventClient) Subscribe(ctx context.Context, eventTypes []string, handle
 	return nil
 }
 
-func (c *EventClient) Publish(ctx context.Context, event *pb.Event) error {
+func (c *EventClient) Publish(ctx context.Context, event *pb.Event) (*pb.PublishResponse, error) {
 	return c.client.Publish(ctx, event)
 }
 
@@ -125,5 +125,5 @@ func (c *EventClient) Close() error {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 	c.connected = false
-	c.conn.Close()
+	return c.conn.Close()
 }
