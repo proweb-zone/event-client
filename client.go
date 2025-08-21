@@ -87,18 +87,43 @@ func (c *EventClient) reconnect() error {
 }
 
 func (c *EventClient) Subscribe(ctx context.Context, eventTypes []string, handler func(*pb.Event) error) error {
-	// Реализация подписки с retry логикой
+	// TODO добавить retry логику
+	req := &pb.SubscriptionRequest{
+		ServiceName: c.serviceName,
+		EventTypes:  eventTypes,
+	}
+
+	stream, err := c.gateway.Subscribe(ctx, req)
+	if err != nil {
+		return err
+	}
+
+	go func() {
+		for {
+			event, err := stream.Recv()
+			if err != nil {
+				log.Printf("Subscription error: %v", err)
+				time.Sleep(5 * time.Second)
+				c.Subscribe(ctx, eventTypes, handler) // Переподписка
+				return
+			}
+
+			if err := handler(event); err != nil {
+				log.Printf("Event handling failed: %v", err)
+			}
+		}
+	}()
+
 	return nil
 }
 
 func (c *EventClient) Publish(ctx context.Context, event *pb.Event) error {
-	// Реализация публикации с retry логикой
-	return nil
+	return c.conn.Publish(ctx, event)
 }
 
 func (c *EventClient) Close() error {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 	c.connected = false
-	return c.conn.Close()
+	c.conn.Close()
 }
