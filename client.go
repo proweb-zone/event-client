@@ -93,7 +93,7 @@ func (c *EventClient) Subscribe(ctx context.Context, eventTypes []string, handle
 		EventTypes:  eventTypes,
 	}
 
-	stream, err := c.gateway.Subscribe(ctx, req)
+	stream, err := c.conn.Subscribe(ctx, req)
 	if err != nil {
 		return err
 	}
