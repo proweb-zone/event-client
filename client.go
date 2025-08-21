@@ -88,10 +88,12 @@ func (c *EventClient) reconnect() error {
 
 func (c *EventClient) Subscribe(ctx context.Context, eventTypes []string, handler func(*pb.Event) error) error {
 	// Реализация подписки с retry логикой
+	return nil
 }
 
 func (c *EventClient) Publish(ctx context.Context, event *pb.Event) error {
 	// Реализация публикации с retry логикой
+	return nil
 }
 
 func (c *EventClient) Close() error {
