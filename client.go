@@ -45,8 +45,9 @@ func (c *EventClient) connect() error {
 	conn, err := grpc.Dial(c.config.GatewayAddress,
 		grpc.WithInsecure(),
 		grpc.WithKeepaliveParams(keepalive.ClientParameters{
-			Time:    30 * time.Second,
-			Timeout: 10 * time.Second,
+			Time:                2 * time.Minute,
+			Timeout:             20 * time.Second,
+			PermitWithoutStream: true,
 		}),
 	)
 	if err != nil {
