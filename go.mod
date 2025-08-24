@@ -7,6 +7,7 @@ toolchain go1.24.6
 require google.golang.org/grpc v1.75.0
 
 require (
+	github.com/proweb-zone/event-protobuf v0.0.0-20250824125415-33e3aaf7d75c // indirect
 	golang.org/x/net v0.41.0 // indirect
 	golang.org/x/sys v0.33.0 // indirect
 	golang.org/x/text v0.26.0 // indirect

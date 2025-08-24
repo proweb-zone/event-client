@@ -10,7 +10,7 @@ import (
 	"google.golang.org/grpc/connectivity"
 	"google.golang.org/grpc/keepalive"
 
-	pb "test/gen/go" // укажите свой путь до protobuf
+	pb "github.com/proweb-zone/event-protobuf" // укажите свой путь до protobuf
 )
 
 type Config struct {
