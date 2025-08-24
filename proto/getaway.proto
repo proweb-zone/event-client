@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package gateway;
+
+option go_package = "event_getaway/gen/go";
+
+service EventGateway {
+  // Микросервисы используют этот endpoint для подписки
+  rpc Subscribe (SubscriptionRequest) returns (stream Event);
+
+  // Микросервисы используют этот endpoint для публикации
+  rpc Publish (Event) returns (PublishResponse);
+}
+
+message Event {
+  string id = 1;
+  string type = 2;
+  string source = 3;
+  bytes payload = 4;
+  int64 timestamp = 5;
+}
+
+message SubscriptionRequest {
+  string service_name = 1;
+  repeated string event_types = 2;
+}
+
+message PublishResponse {
+  bool success = 1;
+  string message = 2;
+}
